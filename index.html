@@ -143,122 +143,72 @@
     </div>
   </div>
 
- <script>
-  // おみくじの種類
-  const omikuji = ["大吉", "中吉", "小吉", "吉", "末吉", "凶"];
-
-  // 運勢ごとのメッセージ
-  const messages = {
-    "大吉": [
-      "今日は何をやっても追い風が吹く日です。",
-      "迷っているなら進んで正解。",
-      "小さな挑戦が大きな結果につながります。",
-      "新しいことにチャレンジすると吉。",
-      "笑顔で過ごすと運気上昇。"
-    ],
-    "中吉": [
-      "焦らず進めば道は自然と開けます。",
-      "人との会話にヒントがあります。",
-      "少し勇気を出すと吉。",
-      "計画を見直すとチャンスが見つかります。"
-    ],
-    "小吉": [
-      "悪くはないですが油断は禁物。",
-      "一歩引いて周りを見ると吉。",
-      "地道な努力が後で実を結びます。",
-      "身近な人との関係に気を配ると吉。"
-    ],
-    "吉": [
-      "平穏な一日。積み重ねが大事です。",
-      "小さな幸せを大切に。",
-      "焦らず普段通りで吉。"
-    ],
-    "末吉": [
-      "すぐの結果は出ませんが、後で効いてきます。",
-      "じっくり取り組むと良い日。"
-    ],
-    "凶": [
-      "無理をしないことが最大の吉。",
-      "今日は守りに入るのが正解。",
-      "慎重に行動すると後悔が少ない日。",
-      "焦らず体調や心を大切に。"
-    ]
-  };
-
-  // ランダムにおみくじを引く例
-  function drawOmikuji() {
-    const result = omikuji[Math.floor(Math.random() * omikuji.length)];
-    const messageList = messages[result];
-    const message = messageList[Math.floor(Math.random() * messageList.length)];
-    alert(result + "！\n" + message);
-  }
-</scrip
-
-  function drawOmikuji() {
-    const result = omikuji[Math.floor(Math.random() * omikuji.length)];
-    const list = messages[result];
-    const detail = list[Math.floor(Math.random() * list.length)];
-
-    document.getElementById("result").textContent = result;
-    document.getElementById("detail").innerHTML =
-      `<div class="section">${detail}</div>`;
-
-    document.getElementById("overlay").classList.add("show");
-  }
-
-  function closeResult() {
-    document.getElementById("overlay").classList.remove("show");
-  }
-</script>
-
-
+  <script>
+    // おみくじの種類
     const omikuji = ["大吉", "中吉", "小吉", "吉", "末吉", "凶"];
-    const sticks = document.getElementById("sticks");
 
+    // 運勢ごとのメッセージ
+    const messages = {
+      "大吉": [
+        "今日は何をやっても追い風が吹く日です。",
+        "迷っているなら進んで正解。",
+        "小さな挑戦が大きな結果につながります。",
+        "新しいことにチャレンジすると吉。",
+        "笑顔で過ごすと運気上昇。"
+      ],
+      "中吉": [
+        "焦らず進めば道は自然と開けます。",
+        "人との会話にヒントがあります。",
+        "少し勇気を出すと吉。",
+        "計画を見直すとチャンスが見つかります。"
+      ],
+      "小吉": [
+        "悪くはないですが油断は禁物。",
+        "一歩引いて周りを見ると吉。",
+        "地道な努力が後で実を結びます。",
+        "身近な人との関係に気を配ると吉。"
+      ],
+      "吉": [
+        "平穏な一日。積み重ねが大事です。",
+        "小さな幸せを大切に。",
+        "焦らず普段通りで吉。"
+      ],
+      "末吉": [
+        "すぐの結果は出ませんが、後で効いてきます。",
+        "じっくり取り組むと良い日。"
+      ],
+      "凶": [
+        "無理をしないことが最大の吉。",
+        "今日は守りに入るのが正解。",
+        "慎重に行動すると後悔が少ない日。",
+        "焦らず体調や心を大切に。"
+      ]
+    };
+
+    // おみくじを引いたときの表示
+    function drawOmikuji() {
+      const result = omikuji[Math.floor(Math.random() * omikuji.length)];
+      const list = messages[result];
+      const detail = list[Math.floor(Math.random() * list.length)];
+
+      document.getElementById("result").textContent = result;
+      document.getElementById("detail").innerHTML =
+        `<div class="section">${detail}</div>`;
+
+      document.getElementById("overlay").classList.add("show");
+    }
+
+    function closeResult() {
+      document.getElementById("overlay").classList.remove("show");
+    }
+
+    // おみくじ棒の生成
+    const sticks = document.getElementById("sticks");
     for (let i = 0; i < 10; i++) {
       const stick = document.createElement("div");
       stick.className = "stick";
       stick.onclick = drawOmikuji;
       sticks.appendChild(stick);
-    }
-
-    async function drawOmikuji() {
-      const result = omikuji[Math.floor(Math.random() * omikuji.length)];
-      document.getElementById("result").textContent = result;
-      document.getElementById("detail").textContent = "お告げを授かっています…";
-      document.getElementById("overlay").classList.add("show");
-
-      try {
-        const res = await fetch(WORKER_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ result })
-        });
-
-        const data = await res.json();
-        document.getElementById("detail").innerHTML = formatText(data.text);
-      } catch (e) {
-        document.getElementById("detail").textContent =
-          "お告げを授かれませんでした。";
-      }
-    }
-
-    function formatText(text) {
-      return text
-        .split("\n")
-        .filter(l => l.trim())
-        .map(line => {
-          if (line.includes("：")) {
-            const [label, msg] = line.split("：");
-            return `<div class="section"><span class="label">【${label}】</span><br>${msg}</div>`;
-          }
-          return `<div class="section">${line}</div>`;
-        })
-        .join("");
-    }
-
-    function closeResult() {
-      document.getElementById("overlay").classList.remove("show");
     }
   </script>
 </body>
