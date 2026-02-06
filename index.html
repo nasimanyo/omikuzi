@@ -64,11 +64,14 @@
 
     .result-card {
       background: #fffaf0;
-      padding: 32px 20px 24px;
+      padding: 32px 24px;
       border-radius: 6px;
-      width: 300px;
+      width: 320px;
       max-height: 90vh;
       overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       text-align: center;
       box-shadow: 0 12px 30px rgba(0,0,0,0.3);
       position: relative;
@@ -99,19 +102,24 @@
     .result-title {
       font-size: 1.8rem;
       font-weight: bold;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
     }
 
     .paper-content {
       writing-mode: vertical-rl;
-      text-align: left;
-      font-size: 0.9rem;
-      line-height: 1.6;
+      text-align: center; /* 中央揃え */
+      font-size: 1rem;
+      line-height: 2.0; /* 行間広めで読みやすく */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
       margin-bottom: 16px;
     }
 
     .section {
-      margin-bottom: 12px;
+      margin-bottom: 0;
     }
 
     .label {
@@ -125,6 +133,7 @@
       border-radius: 999px;
       padding: 8px 16px;
       cursor: pointer;
+      margin-top: 12px;
     }
   </style>
 </head>
@@ -144,10 +153,8 @@
   </div>
 
   <script>
-    // おみくじの種類
     const omikuji = ["大吉", "中吉", "小吉", "吉", "末吉", "凶"];
 
-    // 運勢ごとのメッセージ
     const messages = {
       "大吉": [
         "今日は何をやっても追い風が吹く日です。",
@@ -185,7 +192,6 @@
       ]
     };
 
-    // おみくじを引いたときの表示
     function drawOmikuji() {
       const result = omikuji[Math.floor(Math.random() * omikuji.length)];
       const list = messages[result];
@@ -202,7 +208,6 @@
       document.getElementById("overlay").classList.remove("show");
     }
 
-    // おみくじ棒の生成
     const sticks = document.getElementById("sticks");
     for (let i = 0; i < 10; i++) {
       const stick = document.createElement("div");
